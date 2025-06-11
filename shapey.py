@@ -40,11 +40,6 @@ except ImportError:
     HAS_RDKIT = False
 
 # Local application-specific imports
-try:
-    from smiles_to_ecfp8 import smiles_to_ecfp8
-    HAS_FINGERPRINT_FUNC = True
-except ImportError:
-    HAS_FINGERPRINT_FUNC = False
 
 # ==============================================================================
 # 2. APPLICATION CONFIGURATION
@@ -90,8 +85,20 @@ class GPRegressionModel(gpytorch.models.ExactGP):
     def forward(self, x):
         return gpytorch.distributions.MultivariateNormal(self.mean_module(x), self.covar_module(x))
 
-# COMPLETE REPLACEMENT for your ChemicalFragmentMapper class
-# Replace the ENTIRE class with this fixed version
+
+def smiles_to_ecfp8(df, smiles_col):
+    """Simple ECFP fingerprint generation"""
+    from rdkit.Chem import AllChem
+    fingerprints = []
+    for smiles in df[smiles_col]:
+        mol = Chem.MolFromSmiles(smiles)
+        if mol:
+            fp = AllChem.GetMorganFingerprintAsBitVect(mol, 4, nBits=4096)
+            fingerprints.append(fp)
+        else:
+            fingerprints.append(None)
+    return np.array(fingerprints)
+
 
 class ChemicalFragmentMapper:
     def __init__(self, analysis_results, dataset_df, fingerprint_func):
