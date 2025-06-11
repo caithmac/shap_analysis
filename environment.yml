@@ -1,9 +1,10 @@
 name: shap-analysis
 channels:
   - conda-forge
+  - pytorch
   - defaults
 dependencies:
-  - python=3.11  # Use 3.11 instead of 3.13
+  - python=3.10
   - rdkit
   - streamlit
   - pandas
@@ -12,8 +13,11 @@ dependencies:
   - seaborn
   - plotly
   - scikit-learn
+  - scipy
+  - pillow
+  - pytorch::pytorch
+  - pytorch::cpuonly
   - pip
   - pip:
-    - torch
     - gpytorch
     - shap
