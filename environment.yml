@@ -1,23 +1,34 @@
-name: shap-analysis
+# Conda environment for the Unified Drug Discovery Analysis Platform
+# To create: conda env create -f environment.yml
+name: uddap_env
 channels:
   - conda-forge
-  - pytorch
-  - defaults
 dependencies:
+  # --- Core & Web App---
   - python=3.10
-  - rdkit
   - streamlit
-  - pandas
+  - pip
+
+  # --- Data Science & ML ---
   - numpy
+  - pandas
+  - scikit-learn
+  - tqdm
+  - pytorch
+  - gpytorch
+  - cpuonly # IMPORTANT: Keep for Streamlit Cloud deployment unless GPU is specified.
+  
+  # --- Visualization ---
   - matplotlib
   - seaborn
   - plotly
-  - scikit-learn
-  - scipy
-  - pillow
-  - pytorch::pytorch
-  - pytorch::cpuonly
-  - pip
-  - pip:
-    - gpytorch
-    - shap
+  
+  # --- Cheminformatics ---
+  - rdkit
+  
+  # --- Explainable AI (XAI) ---
+  - shap
+
+  # --- Optional Packages ---
+  - umap-learn
+  - transformers
