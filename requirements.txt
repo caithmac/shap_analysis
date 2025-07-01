@@ -22,7 +22,7 @@ seaborn
 plotly
 
 # --- Cheminformatics ---
-rdkit
+rdkit-pypi
 # Note: 'rdkit' is the official PyPI package. If you face installation issues,
 # installing via conda is a common and robust alternative.
 
