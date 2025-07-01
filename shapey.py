@@ -1494,6 +1494,7 @@ def plot_affinity_predictions(smiles_df, cycle=0):
 
 def visualize_chemical_space(smiles_df, color_by='affinity', method='PCA', fp_type='ECFP', fp_radius=2, fp_bits=2048):
     """Visualize chemical space using a chosen dimensionality reduction method."""
+    from rdkit.Chem import rdFingerprintGenerator # <-- ADD THIS LINE
     if 'SMILES' not in smiles_df.columns:
         st.error("SMILES column not found in data")
         return None, None
