@@ -1,0 +1,3 @@
+# packages.txt
+libxrender1
+libxext6
