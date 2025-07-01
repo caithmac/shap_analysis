@@ -1,0 +1,33 @@
+# requirements.txt for the Unified Drug Discovery Analysis Platform
+# To install: pip install -r requirements.txt
+
+# --- Core & Web App---
+streamlit
+
+# --- Data Science & ML ---
+numpy
+pandas
+scikit-learn
+tqdm
+torch
+# Note: This will install the default PyTorch package from PyPI. 
+# For specific versions (e.g., CUDA or CPU-only), visit https://pytorch.org/get-started/locally/
+# to get the correct installation command for your system.
+gpytorch
+transformers
+
+# --- Visualization ---
+matplotlib
+seaborn
+plotly
+
+# --- Cheminformatics ---
+rdkit
+# Note: 'rdkit' is the official PyPI package. If you face installation issues,
+# installing via conda is a common and robust alternative.
+
+# --- Explainable AI (XAI) ---
+shap
+
+# --- Optional Packages ---
+umap-learn
