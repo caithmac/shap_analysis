@@ -1666,9 +1666,6 @@ class UnifiedDrugDiscoveryApp:
         st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout="wide")
         st.markdown(CUSTOM_APP_CSS, unsafe_allow_html=True)
         
-        if not HAS_RDKIT:
-            st.error("RDKit is required but not installed. Please install it using: pip install rdkit-pypi")
-            return
         
         st.markdown(f'<h1 class="main-header">{PAGE_TITLE}</h1>', unsafe_allow_html=True)
         
