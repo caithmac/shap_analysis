@@ -14,7 +14,7 @@ dependencies:
   - pandas
   - scikit-learn
   - tqdm
-  - pytorch
+  - torch
   - gpytorch
   - cpuonly # IMPORTANT: Keep for Streamlit Cloud deployment unless GPU is specified.
   
