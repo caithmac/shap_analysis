@@ -1,18 +1,16 @@
-# requirements.txt for the Unified Drug Discovery Analysis Platform
-# To install: pip install -r requirements.txt
+# requirements.txt for the SHAP Analysis Streamlit App
+
+# CRITICAL: Pin NumPy to a pre-2.0 version for RDKit compatibility
+numpy<2.0
 
 # --- Core & Web App---
 streamlit
 
 # --- Data Science & ML ---
-numpy
 pandas
 scikit-learn
 tqdm
 torch
-# Note: This will install the default PyTorch package from PyPI. 
-# For specific versions (e.g., CUDA or CPU-only), visit https://pytorch.org/get-started/locally/
-# to get the correct installation command for your system.
 gpytorch
 transformers
 
@@ -22,9 +20,7 @@ seaborn
 plotly
 
 # --- Cheminformatics ---
-rdkit-pypi
-# Note: 'rdkit' is the official PyPI package. If you face installation issues,
-# installing via conda is a common and robust alternative.
+rdkit
 
 # --- Explainable AI (XAI) ---
 shap
