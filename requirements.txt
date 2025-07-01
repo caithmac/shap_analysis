@@ -20,7 +20,7 @@ seaborn
 plotly
 
 # --- Cheminformatics ---
-rdkit
+rdkit-pypi
 
 # --- Explainable AI (XAI) ---
 shap
