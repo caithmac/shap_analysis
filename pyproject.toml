@@ -1,5 +1,4 @@
 # pyproject.toml for the SHAP Analysis Streamlit App
-# This file defines project metadata and dependencies for tools like uv and pip.
 
 [build-system]
 requires = ["setuptools>=61.0"]
@@ -40,3 +39,8 @@ dependencies = [
     # --- Optional Packages ---
     "umap-learn",
 ]
+
+# Add this section to tell the build tool NOT to install the project itself.
+# This treats the project as an application, not a library.
+[tool.poetry]
+package-mode = false
