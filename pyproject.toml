@@ -1,0 +1,42 @@
+# pyproject.toml for the SHAP Analysis Streamlit App
+# This file defines project metadata and dependencies for tools like uv and pip.
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shap-analysis"
+version = "0.1.0"
+description = "A Streamlit app for SHAP analysis."
+requires-python = ">=3.10"
+dependencies = [
+    # CRITICAL: Pin NumPy to a version before 2.0 to ensure
+    # compatibility with the current version of RDKit.
+    "numpy<2.0",
+
+    # --- Core & Web App---
+    "streamlit",
+
+    # --- Data Science & ML ---
+    "pandas",
+    "scikit-learn",
+    "tqdm",
+    "torch",
+    "gpytorch",
+    "transformers",
+
+    # --- Visualization ---
+    "matplotlib",
+    "seaborn",
+    "plotly",
+
+    # --- Cheminformatics ---
+    "rdkit",
+
+    # --- Explainable AI (XAI) ---
+    "shap",
+
+    # --- Optional Packages ---
+    "umap-learn",
+]
