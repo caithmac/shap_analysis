@@ -1879,42 +1879,104 @@ class UnifiedDrugDiscoveryApp:
 
     
     def _show_overview(self):
-        """Show overview of loaded data."""
-        st.markdown('<h2 class="sub-header">Data Overview</h2>', unsafe_allow_html=True)
+    """Show an overview and user guide for the application."""
+    st.markdown('<h2 class="sub-header">Welcome to the Unified Drug Discovery Analysis Platform</h2>', unsafe_allow_html=True)
+    
+    st.markdown("""
+    This platform is an interactive tool designed to analyze and visualize the results from computational drug discovery campaigns. 
+    It bridges the gap between machine learning model interpretability and the practical evaluation of discovery strategies.
+
+    **The main goals of this platform are to help you:**
+    - **Understand *why* an ML model makes certain predictions** by mapping abstract features back to chemical structures.
+    - **Compare the performance of different discovery protocols** to identify the most effective strategies.
+    - **Generate publication-quality figures** to communicate your findings effectively.
+    """)
+
+    st.markdown("---")
+
+    st.markdown("### 🚀 How to Get Started")
+    
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("#### Option 1: Load a Demo Dataset (Recommended)")
+        st.info("""
+        If you are new here, the best way to start is by loading the built-in demo data.
         
-        col1, col2 = st.columns(2)
+        1.  Go to the **sidebar on the left**.
+        2.  Click the **"🚀 Load Demo Dataset"** button.
         
-        with col1:
-            st.markdown("### SHAP Analysis Data")
-            if st.session_state.analysis_data:
-                st.write(f"**{len(st.session_state.analysis_data)}** analysis files loaded")
-                overview_data = []
-                for f, d in st.session_state.analysis_data.items():
-                    overview_data.append({
-                        'File': f,
-                        'Target': d.get('metadata', {}).get('target', 'N/A'),
-                        'Protocol': d.get('metadata', {}).get('protocol', 'N/A')
-                    })
-                st.dataframe(pd.DataFrame(overview_data), use_container_width=True)
-            else:
-                st.info("No SHAP analysis data loaded yet")
+        This will populate the entire application with a pre-analyzed dataset, allowing you to explore all the features immediately.
+        """)
+
+    with col2:
+        st.markdown("#### Option 2: Upload Your Own Data")
+        st.warning("""
+        You can analyze your own data by using the uploaders in the sidebar.
         
-        with col2:
-            st.markdown("### Protocol Results Data")
-            if st.session_state.main_results_df is not None:
-                st.write(f"**Main Results:** {st.session_state.main_results_df.shape[0]} rows")
-                st.write("Datasets:", st.session_state.main_results_df['Dataset'].unique())
-                st.write("Protocols:", st.session_state.main_results_df['Protocol'].unique())
-            else:
-                st.info("No protocol results loaded yet")
-            
-            if st.session_state.mw_results_df is not None:
-                st.write(f"**MW Baseline:** {st.session_state.mw_results_df.shape[0]} rows")
-            
+        1.  Open the **sidebar on the left**.
+        2.  Use the expanders (`Upload Molecule Datasets`, `Upload Protocol Results`, etc.) to upload your files.
+        
+        Please ensure your data is in the expected CSV or PKL format.
+        """)
+        
+    st.markdown("---")
+
+    st.markdown("### 🗺️ Navigating the Platform: What Each Tab Does")
+    
+    tabs_explanation = {
+        "🔬 **Molecular Analysis**": "Start here to explore your chemical data. Visualize the chemical space of your datasets (with PCA, t-SNE, or UMAP), analyze affinity predictions, and view the top-ranked compounds.",
+        "📈 **Feature Evolution**": "Track how the importance of key chemical features (identified by SHAP) changes over the course of an active learning simulation. This helps understand the model's learning dynamics.",
+        "🧬 **Chemical Fragments**": "This is the core interpretation module. It translates abstract SHAP feature importances into tangible, chemically meaningful fragments. See which substructures the model believes are most important for activity.",
+        "📊 **Protocol Performance**": "Rigorously compare the performance of different discovery strategies. View learning curves and create detailed bar charts to see which combination of ML kernel, fingerprint, and protocol works best for each dataset.",
+        "📉 **Distribution Analysis**": "Visualize the final performance of different protocols as distribution plots (ridge plots) to understand the robustness and variance of each method.",
+        "💊 **Drug Design**": "Get computer-aided suggestions for new molecular scaffolds based on the most important chemical fragments identified in your analyses.",
+        "🧪 **Advanced Analytics**": "Perform high-level, cross-dataset analyses. Compare feature importance across different targets, analyze feature stability, or identify recurring chemical patterns and SAR.",
+        "📄 **Publication Figures**": "Generate specific, pre-formatted figures that are designed to be high-quality and suitable for direct use in manuscripts and presentations.",
+    }
+
+    for tab_name, description in tabs_explanation.items():
+        with st.expander(tab_name):
+            st.write(description)
+
+    st.markdown("---")
+    
+    st.markdown('### 📊 Current Data Status')
+    
+    # This section provides confirmation of what data is currently loaded.
+    if not any([st.session_state.get('molecular_data_df') is not None, st.session_state.main_results_df is not None, st.session_state.analysis_data]):
+        st.info("No data is currently loaded. Use the sidebar to load a demo set or upload your own files.")
+    else:
+        status_col1, status_col2 = st.columns(2)
+        with status_col1:
+            st.markdown("##### Molecule & Protocol Data")
             if st.session_state.get('molecular_data_df') is not None:
                 df = st.session_state.molecular_data_df
                 source = st.session_state.get('molecular_data_source', 'an available source')
-                st.write(f"**Molecular Data:** {len(df)} molecules from '{source}'")
+                st.success(f"**Molecular Data:** {len(df)} molecules loaded from '{source}'.")
+            else:
+                st.warning("**Molecular Data:** Not loaded.")
+
+            if st.session_state.main_results_df is not None:
+                st.success(f"**Protocol Results:** {len(st.session_state.main_results_df)} records loaded.")
+            else:
+                st.warning("**Protocol Results:** Not loaded.")
+
+        with status_col2:
+            st.markdown("##### SHAP Analysis Data")
+            if st.session_state.analysis_data:
+                st.success(f"**SHAP Analyses:** {len(st.session_state.analysis_data)} files loaded.")
+                st.dataframe(
+                    pd.DataFrame([{
+                        'Analysis Key': key,
+                        'Target': data.get('metadata', {}).get('target', 'N/A'),
+                        'Protocol': data.get('metadata', {}).get('protocol', 'N/A')
+                    } for key, data in st.session_state.analysis_data.items()]),
+                    hide_index=True
+                )
+            else:
+                st.warning("**SHAP Analyses:** Not loaded.")
+                
     
     def _show_evolution_analysis(self):
         """Show feature evolution analysis."""
