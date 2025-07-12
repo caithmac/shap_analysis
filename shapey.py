@@ -1693,9 +1693,8 @@ class UnifiedDrugDiscoveryApp:
     
     def _create_sidebar(self):
         """Create sidebar with data upload and settings."""
-        st.sidebar.header("📁 Data Upload")
+        st.sidebar.header("📁 Data Upload Check")
         
-        st.sidebar.header("📁 Data Upload")
 
         st.sidebar.markdown("New to the app? Load a complete dataset to get started.")
         if st.sidebar.button("🚀 Load Demo Dataset", use_container_width=True, type="primary"):
