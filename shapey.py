@@ -1615,6 +1615,18 @@ def visualize_top_compounds(smiles_df, n=5, sort_by='affinity', ascending=False)
     
     return img, top_df.loc[valid_indices]
 
+@st.cache_data(show_spinner="Downloading demo file: {_file_name}...")
+def download_and_cache_file(url, _file_name):
+    """Downloads a file from a URL, caches it, and returns its content."""
+    import requests
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.content
+    except requests.exceptions.RequestException as e:
+        st.error(f"Failed to download {_file_name}: {e}")
+        return None
+
 # ==============================================================================
 # 6. MAIN STREAMLIT APPLICATION CLASS
 # ==============================================================================
@@ -1683,6 +1695,14 @@ class UnifiedDrugDiscoveryApp:
         """Create sidebar with data upload and settings."""
         st.sidebar.header("📁 Data Upload")
         
+        st.sidebar.header("📁 Data Upload")
+
+        st.sidebar.markdown("New to the app? Load a complete dataset to get started.")
+        if st.sidebar.button("🚀 Load Demo Dataset", use_container_width=True, type="primary"):
+            self._load_demo_data()
+        st.sidebar.markdown("---")
+    
+        st.sidebar.markdown("Or, upload your own data below:")
         # SHAP Analysis Files
         with st.sidebar.expander("Upload SHAP Analysis (.pkl)", False):
             uploaded_analysis = st.file_uploader("Select .pkl files", type=['pkl'], 
@@ -1734,6 +1754,58 @@ class UnifiedDrugDiscoveryApp:
             'show_grid': st.sidebar.checkbox('Show Grid', value=True),
             'show_error_bars': st.sidebar.checkbox('Show Error Bars', value=True)
         }
+
+    def _load_demo_data(self):
+        """Loads a complete set of demo data from GitHub Releases."""
+        st.toast("Loading demo dataset...", icon="⏳")
+    
+        base_url = "https://github.com/caithmac/shap_analysis/releases/download/Pkl"
+    
+        dataset_urls = {
+        'TYK2': f"{base_url}/composite_tyk2.csv", 'D2R':  f"{base_url}/composite_d2r.csv",
+        'MPRO': f"{base_url}/mpro_sorted.csv", 'USP7': f"{base_url}/USP7_sorted.csv",
+    }
+        results_urls = {
+        'main': f"{base_url}/recall_combined_results__3_.csv",
+        'mw':   f"{base_url}/mw_comparison_metrics.csv",
+    }
+        shap_urls = {
+        'TYK2_ucb-exploit-heavy_complete_results.pkl': f"{base_url}/TYK2_ucb-exploit-heavy_complete_results.pkl",
+        'TYK2_ucb-explore-heavy_complete_results.pkl': f"{base_url}/TYK2_ucb-explore-heavy_complete_results.pkl",
+        'USP7_ucb-exploit-heavy_complete_results.pkl': f"{base_url}/USP7_ucb-exploit-heavy_complete_results.pkl",
+        'USP7_ucb-explore-heavy_complete_results.pkl': f"{base_url}/USP7_ucb-explore-heavy_complete_results.pkl",
+    }
+
+        self.initialize_session_state() # Reset state
+
+        try:
+            for name, url in dataset_urls.items():
+                content = download_and_cache_file(url, _file_name=f"{name}_dataset.csv")
+                if content: st.session_state.uploaded_datasets[name] = pd.read_csv(io.BytesIO(content))
+            st.sidebar.success(f"✓ Loaded {len(st.session_state.uploaded_datasets)} demo datasets.")
+        except Exception as e:
+            st.sidebar.error(f"Error processing demo datasets: {e}")
+            return
+
+        try:
+            main_content = download_and_cache_file(results_urls['main'], _file_name="protocol_results.csv")
+            if main_content: st.session_state.main_results_df = pd.read_csv(io.BytesIO(main_content))
+            mw_content = download_and_cache_file(results_urls['mw'], _file_name="mw_baseline.csv")
+            if mw_content: st.session_state.mw_results_df = pd.read_csv(io.BytesIO(mw_content))
+            st.sidebar.success("✓ Loaded demo protocol results.")
+        except Exception as e:
+            st.sidebar.error(f"Error processing protocol results: {e}")
+
+        try:
+            for key, url in shap_urls.items():
+                content = download_and_cache_file(url, _file_name=f"{key}")
+                if content: st.session_state.analysis_data[key] = pickle.load(io.BytesIO(content))
+            st.sidebar.success(f"✓ Loaded {len(st.session_state.analysis_data)} demo SHAP analyses.")
+        except Exception as e:
+            st.sidebar.error(f"Error processing SHAP data: {e}")
+    
+        self._prepare_molecular_data()
+        st.rerun()
     
     def _process_files(self, files, state_key, load_func, by_target=False):
         """Process uploaded files."""
