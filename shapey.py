@@ -1693,7 +1693,7 @@ class UnifiedDrugDiscoveryApp:
     
     def _create_sidebar(self):
         """Create sidebar with data upload and settings."""
-        st.sidebar.header("📁 Data Upload Check")
+        st.sidebar.header("📁 Data Upload")
         
 
         st.sidebar.markdown("New to the app? Load a complete dataset to get started.")
@@ -1879,40 +1879,40 @@ class UnifiedDrugDiscoveryApp:
 
     
     def _show_overview(self):
-        """Show an overview and user guide for the application."""
+        """Show an overview and user guide for the application, framed for research collaborators."""
         st.markdown('<h2 class="sub-header">Welcome to the Unified Drug Discovery Analysis Platform</h2>', unsafe_allow_html=True)
     
         st.markdown("""
-        This platform is an interactive tool designed to analyze and visualize the results from computational drug discovery campaigns. 
-        It bridges the gap between machine learning model interpretability and the practical evaluation of discovery strategies.
-
-        **The main goals of this platform are to help you:**
-        - **Understand *why* an ML model makes certain predictions** by mapping abstract features back to chemical structures.
-        - **Compare the performance of different discovery protocols** to identify the most effective strategies.
-        - **Generate publication-quality figures** to communicate your findings effectively.
+        This platform provides an interactive interface to explore the comprehensive results of our active learning (AL) benchmarking study. 
+        It is designed to bridge the gap between our high-level performance metrics and the deep, mechanistic insights derived from our interpretability analyses.
+    
+        **The main goals of this platform are to allow you to:**
+        - **Explore *our* findings on model interpretability**, by mapping the abstract features from our models back to specific chemical structures.
+        - **Interactively compare the performance of the different discovery protocols** we evaluated, to understand their context-dependent efficacy.
+        - **Generate the specific, publication-quality figures** used in our manuscript, and explore the underlying data.
         """)
-
+    
         st.markdown("---")
-
-        st.markdown("### 🚀 How to Get Started")
+    
+        st.markdown("### 🚀 How to Explore Our Results")
     
         col1, col2 = st.columns(2)
-
+    
         with col1:
-            st.markdown("#### Option 1: Load a Demo Dataset (Recommended)")
+            st.markdown("#### Option 1: Load Our Pre-analyzed Results (Recommended)")
             st.info("""
-            If you are new here, the best way to start is by loading the built-in demo data.
+            The best way to explore our findings is to load the built-in demo data, which contains the complete results from our study.
         
             1.  Go to the **sidebar on the left**.
             2.  Click the **"🚀 Load Demo Dataset"** button.
         
-            This will populate the entire application with a pre-analyzed dataset, allowing you to explore all the features immediately.
+            This will populate the entire application with our pre-analyzed dataset, allowing you to interactively explore all our findings immediately.
             """)
-
+    
         with col2:
-            st.markdown("#### Option 2: Upload Your Own Data")
+            st.markdown("#### Option 2: Upload Your Own Data (for comparison)")
             st.warning("""
-            You can analyze your own data by using the uploaders in the sidebar.
+            You can also upload your own data for direct comparison or analysis using our framework.
         
             1.  Open the **sidebar on the left**.
             2.  Use the expanders (`Upload Molecule Datasets`, `Upload Protocol Results`, etc.) to upload your files.
@@ -1921,31 +1921,31 @@ class UnifiedDrugDiscoveryApp:
             """)
         
         st.markdown("---")
-
-        st.markdown("### 🗺️ Navigating the Platform: What Each Tab Does")
+    
+        st.markdown("### 🗺️ Navigating Our Study's Findings: What Each Tab Shows")
     
         tabs_explanation = {
-            "🔬 **Molecular Analysis**": "Start here to explore your chemical data. Visualize the chemical space of your datasets (with PCA, t-SNE, or UMAP), analyze affinity predictions, and view the top-ranked compounds.",
-            "📈 **Feature Evolution**": "Track how the importance of key chemical features (identified by SHAP) changes over the course of an active learning simulation. This helps understand the model's learning dynamics.",
-            "🧬 **Chemical Fragments**": "This is the core interpretation module. It translates abstract SHAP feature importances into tangible, chemically meaningful fragments. See which substructures the model believes are most important for activity.",
-            "📊 **Protocol Performance**": "Rigorously compare the performance of different discovery strategies. View learning curves and create detailed bar charts to see which combination of ML kernel, fingerprint, and protocol works best for each dataset.",
-            "📉 **Distribution Analysis**": "Visualize the final performance of different protocols as distribution plots (ridge plots) to understand the robustness and variance of each method.",
-            "💊 **Drug Design**": "Get computer-aided suggestions for new molecular scaffolds based on the most important chemical fragments identified in your analyses.",
-            "🧪 **Advanced Analytics**": "Perform high-level, cross-dataset analyses. Compare feature importance across different targets, analyze feature stability, or identify recurring chemical patterns and SAR.",
-            "📄 **Publication Figures**": "Generate specific, pre-formatted figures that are designed to be high-quality and suitable for direct use in manuscripts and presentations.",
+            "🔬 **Molecular Analysis**": "Start here to explore the chemical data from our study. Visualize the chemical space of the TYK2, USP7, D2R, and MPRO datasets, analyze our model's affinity predictions, and view the top-ranked compounds identified.",
+            "📈 **Feature Evolution**": "Track how the importance of key chemical features (identified by our SHAP analysis) changes over the course of our active learning simulations. This helps understand the learning dynamics of our models.",
+            "🧬 **Chemical Fragments**": "This is the core interpretation module for our results. It translates the abstract SHAP feature importances from our models into tangible, chemically meaningful fragments. See which substructures our models found to be most important for activity.",
+            "📊 **Protocol Performance**": "Rigorously compare the performance of the different discovery strategies we evaluated. View our learning curves and detailed bar charts to see which combination of ML kernel, fingerprint, and protocol worked best for each of our datasets.",
+            "📉 **Distribution Analysis**": "Visualize the final performance of the different protocols we tested as distribution plots (ridge plots) to understand the robustness and variance of each method in our study.",
+            "💊 **Drug Design**": "Explore computer-aided suggestions for new molecular scaffolds based on the most important chemical fragments identified in our analyses.",
+            "🧪 **Advanced Analytics**": "Perform high-level, cross-dataset analyses on our results. Compare feature importance across different targets, analyze feature stability, or identify recurring chemical patterns and SARs from our study.",
+            "📄 **Publication Figures**": "Generate the specific, pre-formatted figures used in our manuscript, designed to be high-quality and suitable for direct use in presentations.",
         }
-
+    
         for tab_name, description in tabs_explanation.items():
             with st.expander(tab_name):
                 st.write(description)
-
-        st.markdown("---")
     
+        st.markdown("---")
+        
         st.markdown('### 📊 Current Data Status')
     
         # This section provides confirmation of what data is currently loaded.
         if not any([st.session_state.get('molecular_data_df') is not None, st.session_state.main_results_df is not None, st.session_state.analysis_data]):
-            st.info("No data is currently loaded. Use the sidebar to load a demo set or upload your own files.")
+            st.info("No data is currently loaded. Use the sidebar to load our demo set or upload your own files.")
         else:
             status_col1, status_col2 = st.columns(2)
             with status_col1:
@@ -1956,12 +1956,12 @@ class UnifiedDrugDiscoveryApp:
                     st.success(f"**Molecular Data:** {len(df)} molecules loaded from '{source}'.")
                 else:
                     st.warning("**Molecular Data:** Not loaded.")
-
+    
                 if st.session_state.main_results_df is not None:
                     st.success(f"**Protocol Results:** {len(st.session_state.main_results_df)} records loaded.")
                 else:
                     st.warning("**Protocol Results:** Not loaded.")
-
+    
             with status_col2:
                 st.markdown("##### SHAP Analysis Data")
                 if st.session_state.analysis_data:
