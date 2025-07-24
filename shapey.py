@@ -1,4 +1,4 @@
-#==============================================================================
+c#==============================================================================
 # UNIFIED DRUG DISCOVERY ANALYSIS PLATFORM
 # Combines SHAP-guided analysis with protocol performance visualization
 # 
@@ -1761,7 +1761,7 @@ class UnifiedDrugDiscoveryApp:
         base_url = "https://github.com/caithmac/shap_analysis/releases/download/Pkl"
     
         dataset_urls = {
-        'TYK2': f"{base_url}/composite_tyk2.csv", 'D2R':  f"{base_url}/composite_d2r.csv",
+        'TYK2': f"{base_url}/TYK2_sorted.csv", 'D2R':  f"{base_url}/composite_d2r.csv",
         'MPRO': f"{base_url}/mpro_sorted.csv", 'USP7': f"{base_url}/USP7_sorted.csv",
     }
         results_urls = {
